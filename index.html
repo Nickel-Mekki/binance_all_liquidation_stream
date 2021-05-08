@@ -2,18 +2,19 @@
 <html lang="ja">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
     <title>BINANCEお買い得情報</title>
 </head>
 <body>
     <!--- お買い得情報 --->
-    <section>
+    <section id="title">
         <h1>お買い得情報</h1>
     </section>
-    <section>
-        <ul id="msgBox"></ul>
+    <section id="message">
+        <ul id="messageList"></ul>
     </section>
-    <section>
+    <section id="ctrlBox">
         <!--- 銘柄コードを受け付けるボックス --->
         <select id="symbol"></select>
         <!--- 描画期間を選ばせるプルダウンメニュー --->
@@ -26,13 +27,14 @@
         </select>
         <!--- ローソク本数を選ばせるプルダウンメニュー --->
         <select id="limit">
-            <option value="100">100</option>
-            <option value="200" selected>200</option>
+            <option value="100" selected>100</option>
+            <option value="200">200</option>
             <option value="500">500</option>
             <option value="1000">1000</option>
             <option value="1500">1500</option>
         </select>
-        <button id='btn'>Get Chart</button>
+        <button id='btn'>更新</button>
+        <button id='linkBtn'>BINANCE サイトへ</button>
     </section>
     <section>
         <!--- ローソク足及び移動平均線グラフを配置 --->
