@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width" />
+    <title>BINANCEお買い得情報</title>
+</head>
+<body>
+    <!--- お買い得情報 --->
+    <section>
+        <h1>お買い得情報</h1>
+    </section>
+    <section>
+        <ul id="msgBox"></ul>
+    </section>
+    <section>
+        <!--- 銘柄コードを受け付けるボックス --->
+        <select id="symbol"></select>
+        <!--- 描画期間を選ばせるプルダウンメニュー --->
+        <select id="interval">
+            <option value="1m:1" selected>1m</option>
+            <option value="15m:15">15m</option>
+            <option value="1h:60">1h</option>
+            <option value="4h:240">4h</option>
+            <option value="1d:1440">1d</option>
+        </select>
+        <!--- ローソク本数を選ばせるプルダウンメニュー --->
+        <select id="limit">
+            <option value="100">100</option>
+            <option value="200" selected>200</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="1500">1500</option>
+        </select>
+        <button id='btn'>Get Chart</button>
+    </section>
+    <section>
+        <!--- ローソク足及び移動平均線グラフを配置 --->
+        <div id='appendMain'></div>
+        <!--- 出来高の棒グラフを配置 --->
+        <div id='appendVolume'></div>
+    </section>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <!--- ここでGoogle Chartの読み込み --->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="chart.js"></script>
+</body>
+</html>
