@@ -14,6 +14,17 @@ $('#btn').click(function(){
     getInfo(symbol, interval, limit, mainChart);
 })
 
+$('#linkBtn').click(function(){
+    let symbol = $('#symbol').val();
+    if (symbol.indexOf("_") === -1){
+        symbol = symbol.toLowerCase();
+    } else {
+        symbol = symbol.split("_");
+        symbol = symbol[0].toLowerCase() + "_quarter";
+    }
+    window.open('https://www.binance.com/ja/futures/' + symbol, '_blank');
+})
+
 function getInfo(symbol, interval, limit, callback){
     let date = new Date();
     let now = date.getTime();
@@ -51,6 +62,7 @@ function setOptionsHtmlForSymbols(result){
         option.innerHTML = result.symbols[i].symbol;
         symbol.appendChild(option);
     };
+    setInterval(reLoadsChart, 2000);
 }
 
 function mainChart(result){
@@ -104,25 +116,31 @@ function mainChart(result){
     //チャートの見た目に関する記述、詳細は公式ドキュメントをご覧になってください
     let options = {
         chartArea:{left:10,top:10,right:80,bottom:10},
-        colors: ['#003A76'],
+        colors: ["#003A76"],
+        backgroundColor: "#EEE",
         legend: {
-            position: 'none',
+            position: "none",
         },
         vAxis:{
-            viewWindowMode:'maximized'
+            viewWindowMode: "maximized"
         },
         hAxis: {
+            textPosition: "none",
             direction: -1,
         },
         bar: { 
-            groupWidth: '100%' 
+            groupWidth: "100%"
         },
         width: "100%",
         height: 350,
-        lineWidth: 2,
-        curveType: 'function',
+        lineWidth: 1,
+        curveType: "function",
         //チャートのタイプとして、ローソク足を指定
-        seriesType: "candlesticks",  
+        seriesType: "candlesticks",
+        candlestick: {
+            fallingColor: { strokeWidth: 1},
+            risingColor: { strokeWidth: 1}
+        },
         //ローソク足だでなく、線グラフも三種類表示することを記述
         series: {
             0:{
@@ -130,17 +148,17 @@ function mainChart(result){
             },
             1:{
                 type: "line",
-                color: 'green',
+                color: "green",
                 targetAxisIndex: 1,
             },
             2:{
                 type: "line",
-                color: 'red',
+                color: "red",
                 targetAxisIndex: 1,
             },
             3:{
                 type: "line",
-                color: 'orange',
+                color: "orange",
                 targetAxisIndex: 1,
             },
         } 
@@ -186,8 +204,9 @@ function volumeChart(volume, dates, length){
     }
     //ローソク足の時と同じように、見た目の設定をする
     let options = {
-        chartArea:{left:10,top:10,right:80,bottom:100},
-        colors: ['#003A76'],
+        chartArea:{left:10,top:10,right:80,bottom:90},
+        colors: ["#003A76"],
+        backgroundColor: "#EEE",
         legend: {
             position: 'none',
         },
@@ -213,6 +232,13 @@ function volumeChart(volume, dates, length){
     chart.draw(chartData, options);
 }
 
+function reLoadsChart(){
+    let symbol = document.getElementById("symbol");
+    let interval = document.getElementById("interval");
+    let limit = document.getElementById("limit");
+    getInfo(symbol.value, interval.value, limit.value, mainChart);
+}
+
 function recieveLiquidationMessage(){
     const URL = "https://www.binance.com/ja/futures/"
     const WEBSOCKET_URL = "wss://fstream.binance.com/ws/!forceOrder@arr"
@@ -231,7 +257,7 @@ function recieveLiquidationMessage(){
         let price = parseFloat(order["ap"]);
         let quantity = parseInt(price * parseFloat(order["z"]));
         if (side === "SELL" && symbol in IGNORE_SYMBOLS === false && quantity >= MINIMUM_QUANTITY) {
-            let ul = document.getElementById("msgBox");
+            let ul = document.getElementById("messageList");
             let li = document.createElement("li");
             li.setAttribute("class", symbol)
             li.innerHTML = dt + " セール開催中! <a href='" + URL + symbol.replace("USDT", "_USDT") + "' target='_blank'>" + symbol + "</a> が破格の " + price + " USDTにて " + quantity + " USDT購入されています。";
