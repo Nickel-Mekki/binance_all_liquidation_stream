@@ -14,34 +14,38 @@
     <section id="message">
         <ul id="messageList"></ul>
     </section>
-    <section id="ctrlBox">
-        <!--- 銘柄コードを受け付けるボックス --->
-        <select id="symbol"></select>
-        <!--- 描画期間を選ばせるプルダウンメニュー --->
-        <select id="interval">
-            <option value="1m:1" selected>1m</option>
-            <option value="15m:15">15m</option>
-            <option value="1h:60">1h</option>
-            <option value="4h:240">4h</option>
-            <option value="1d:1440">1d</option>
-        </select>
-        <!--- ローソク本数を選ばせるプルダウンメニュー --->
-        <select id="limit">
-            <option value="100" selected>100</option>
-            <option value="200">200</option>
-            <option value="500">500</option>
-            <option value="1000">1000</option>
-            <option value="1500">1500</option>
-        </select>
-        <button id='btn'>更新</button>
-        <button id='linkBtn'>BINANCE サイトへ</button>
-    </section>
     <section>
+        <!--- 清算出来高の横棒グラフを配置 --->
+        <div id='appendLiquidationVolume'></div>
         <!--- ローソク足及び移動平均線グラフを配置 --->
+        <section id="ctrlBox">
+            <!--- 銘柄コードを受け付けるボックス --->
+            <select id="symbol"></select>
+            <!--- 描画期間を選ばせるプルダウンメニュー --->
+            <select id="interval">
+                <option value="1m:1" selected>1m</option>
+                <option value="15m:15">15m</option>
+                <option value="1h:60">1h</option>
+                <option value="4h:240">4h</option>
+                <option value="1d:1440">1d</option>
+            </select>
+            <!--- ローソク本数を選ばせるプルダウンメニュー --->
+            <select id="limit">
+                <option value="100" selected>100</option>
+                <option value="200">200</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+                <option value="1500">1500</option>
+            </select>
+            <button id='btn'>更新</button>
+            <button id='linkBtn'>BINANCE サイトへ</button>
+        </section>
         <div id='appendMain'></div>
         <!--- 出来高の棒グラフを配置 --->
         <div id='appendVolume'></div>
     </section>
+    <!--- 文字幅測定用 --->
+    <span id="ruler" style="visibility:hidden;position:absolute;white-space:nowrap;"></span>
     <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <!--- ここでGoogle Chartの読み込み --->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
