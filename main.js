@@ -56,7 +56,7 @@ function ajaxGetRequests(url, callback){
 function setOptionsHtmlForSymbols(result){
     let symbol = document.getElementById("symbol");
     document.createElement('option')
-    for(let i = 0; i < result.symbols.length; i++){
+    for(let i = 0; i < result.symbols.length; i=(i+1)|0){
         let option = document.createElement('option');
         option.setAttribute('value', result.symbols[i].symbol);
         option.innerHTML = result.symbols[i].symbol;
@@ -72,7 +72,7 @@ function mainChart(result){
 
     //日付ようにString型のカラムを一つ、チャート描画用に数値型のカラムを７つ作成
     chartData.addColumn('string');
-    for(let x = 0;x < 7; x++){
+    for(let x = 0;x < 7; x=(x+1)|0){
         chartData.addColumn('number');
     }
     //いちいち書くのが面倒なので、取得した情報の長さを配列に入れる
@@ -95,7 +95,7 @@ function mainChart(result){
     let volume = new Array();
     //チャートの日付を保持する配列
     let dates = new Array();
-    for(let s = 0; s < length; s++){
+    for(let s = 0; s < length; s=(s+1)|0){
         if(result[s][5] != ''){
             volume[s] = result[s][5];
             date = new Date(result[s][0]);
@@ -105,12 +105,12 @@ function mainChart(result){
         }
     }
     //配列insertingDataの中に、[安値、始値、高値、終値、７日移動平均線、２５日移動平均線、９９日移動平均線]の形で値を入れ込む
-    for(let a = length - 1; a >= 0; a--){
+    for(let a = length - 1; a >= 0; a=(a-1)|0){
         insertingData[a] = [dates[a],parseFloat(result[a][3]),parseFloat(result[a][1]),parseFloat(result[a][4]),parseFloat(result[a][2]),ave[0][a],ave[1][a],ave[2][a]]
     }
     //チャート描画用の配列の中に、insertingDataの値を入れ込む
     //最古の50日分のデータまでは移動平均線のデータが揃っていないので、取り除く
-    for (let i = 0; i < insertingData.length; i++){
+    for (let i = 0; i < insertingData.length; i=(i+1)|0){
         chartData.addRow(insertingData[i]);
     }
     //チャートの見た目に関する記述、詳細は公式ドキュメントをご覧になってください
@@ -175,8 +175,8 @@ function getSMA(data, period){
     let sma = new Array();
     let divide = 0;
     let temp = 0;
-    for(let m = 0; m < data.length - (period - 1); m++){
-        for(let n = 0; n < period; n++){
+    for(let m = 0; m < data.length - (period - 1); m=(m+1)|0){
+        for(let n = 0; n < period; n=(n+1)|0){
             if(data[m+n][4] != ''){
                 temp = temp + parseFloat(data[m+n][4]);
                 divide++;
@@ -196,11 +196,11 @@ function volumeChart(volume, dates, length){
     chartData.addColumn('number');
     let insertingData = new Array();
     //配列insertingDataの中に、[日付、出来高]の形式でデータを入れ込む
-    for(let a = length - 1; a >= 0; a--){
+    for(let a = length - 1; a >= 0; a=(a-1)|0){
         insertingData[a] = [dates[a],parseInt(volume[a])]
     }
     //insertingDataの値をチャート描画用の変数に入れ込む
-    for (let i = 0; i < insertingData.length; i++){
+    for (let i = 0; i < insertingData.length; i=(i+1)|0){
         chartData.addRow(insertingData[i]);
     }
     //ローソク足の時と同じように、見た目の設定をする
@@ -268,7 +268,7 @@ function recieveLiquidationMessage(){
                 let limit = document.getElementById("limit");
                 getInfo(symbol, interval.value, limit.value, mainChart);
                 let symbolOption = document.getElementById("symbol").getElementsByTagName("option");
-                for(i=0; i < symbolOption.length; i++){
+                for(i=0; i < symbolOption.length; i=(i+1)|0){
                     if(symbolOption[i].value == symbol){
                         symbolOption[i].selected = true;
                     break;
