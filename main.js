@@ -234,6 +234,43 @@ function volumeChart(volume, dates, length){
     chart.draw(chartData, options);
 }
 
+function liquidationVolumeChart(data){
+    let chartData = new google.visualization.DataTable();
+    chartData.addColumn('string');
+    chartData.addColumn('number');
+    //insertingDataの値をチャート描画用の変数に入れ込む
+    let element = $("#ruler");
+    let stringWidth = 0;
+    let maxSymbolNameLength = 0;
+    let maxQuantityLength = 0;
+    for (let i = 0; i < data.length; i=(i+1)|0){
+        chartData.addRow([data[i][0], data[i][3]]);
+        stringWidth = element.text(data[i][0]).get(0).offsetWidth;
+        if (stringWidth > maxSymbolNameLength) {
+            maxSymbolNameLength = stringWidth;
+        }
+        stringWidth = element.text(data[i][3]).get(0).offsetWidth;
+        if (stringWidth > maxQuantityLength) {
+            maxQuantityLength = stringWidth;
+        }
+    }
+    //ローソク足の時と同じように、見た目の設定をする
+    let rem = 13;
+    let height = 200 + rem * data.length;
+    let options = {
+        chartArea:{left: maxSymbolNameLength + 5, top: 10, right: maxQuantityLength + 5, bottom: rem * 2},
+        colors: ["#003A76"],
+        backgroundColor: "#EEE",
+        legend: {position: 'none'},
+        height: height,
+        width: "100%",
+        hAxis: {},
+        vAxis:{}
+    }
+    let chart = new google.visualization.BarChart(document.getElementById('appendLiquidationVolume'));
+    chart.draw(chartData, options);
+}
+
 function reLoadsChart(){
     let symbol = document.getElementById("symbol");
     let interval = document.getElementById("interval");
@@ -244,14 +281,17 @@ function reLoadsChart(){
 function recieveLiquidationMessage(){
     const URL = "https://www.binance.com/ja/futures/"
     const WEBSOCKET_URL = "wss://fstream.binance.com/ws/!forceOrder@arr"
-    const MINIMUM_QUANTITY = 1000
+    const MINIMUM_QUANTITY = 1
     const IGNORE_SYMBOLS = []
+
+    let liquidationData = new Array()
 
     let connection = new WebSocket(WEBSOCKET_URL);
 
     connection.onmessage = function(event) {
         let message = JSON.parse(event.data);
-        let dt_obj = new Date(message["E"]);
+        let timestamp = message["E"];
+        let dt_obj = new Date(timestamp);
         let dt = dt_obj.getFullYear() + "-" + (dt_obj.getMonth() + 1) + "-" + dt_obj.getDate() + " " + dt_obj.getHours() + ":" + dt_obj.getMinutes() + ":" + dt_obj.getSeconds();
         let order = message["o"];
         let symbol = order["s"];
@@ -259,6 +299,24 @@ function recieveLiquidationMessage(){
         let price = parseFloat(order["ap"]);
         let quantity = parseInt(price * parseFloat(order["z"]));
         if (side === "SELL" && symbol in IGNORE_SYMBOLS === false && quantity >= MINIMUM_QUANTITY) {
+            let hasRecord = 0
+            let date = new Date();
+            for (let i = 0; i < liquidationData.length; i=(i+1)|0){
+                if (liquidationData[i][0] === symbol) {
+                    liquidationData[i] = [symbol, timestamp, price, liquidationData[i][3] + quantity];
+                    hasRecord = 1
+                }
+                if (liquidationData[i][1] < date.getTime() - 360000) {
+                    liquidationData[i][3] = 0;
+                }
+            }
+            if (!hasRecord) {
+                liquidationData.push([symbol, timestamp, price, quantity]);
+            }
+            liquidationData = liquidationData.filter(function(value) {
+                return value[3] > 0;
+            });
+            liquidationVolumeChart(liquidationData);
             let ul = document.getElementById("messageList");
             let li = document.createElement("li");
             li.setAttribute("class", symbol)
