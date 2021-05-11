@@ -122,6 +122,7 @@ function mainChart(result){
             position: "none",
         },
         vAxis:{
+            format: 'short',
             viewWindowMode: "maximized"
         },
         hAxis: {
@@ -220,6 +221,7 @@ function volumeChart(volume, dates, length){
         width: "100%",
         height: 200,
         vAxis:{
+            format: 'short',
             viewWindowMode:'maximized',
         },
         series: {
