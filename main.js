@@ -1,11 +1,19 @@
 // このコードは https://qiita.com/KMim/items/930792c05b014f73f6dc の記事を参考に作成されています。
+google.charts.load('current', {'packages':['corechart']});
+
+let charts = ""
 
 window.onload = function(){
     getMarkets(setOptionsHtmlForSymbols);
     recieveLiquidationMessage();
+    charts = new Charts();
 }
 
-google.charts.load('current', {'packages':['corechart']});
+class Charts {
+    main = new google.visualization.ComboChart(document.getElementById('appendMain'));
+    volume = new google.visualization.ColumnChart(document.getElementById('appendVolume'));
+    liquidationVolume = new google.visualization.BarChart(document.getElementById('appendLiquidationVolume'));
+}
 
 $('#btn').click(function(){
     let symbol = $('#symbol').val();
@@ -79,8 +87,6 @@ function mainChart(result){
     let length = result.length;
     //描画用のデータを一時的に入れる
     let insertingData = new Array(length);
-    //平均を出すための割り算の分母
-    let divide = 0;
     //二次元配列aveに、平均線の日数と平均値を入れる
     let ave = new Array();
     //７日平均線用
@@ -165,8 +171,8 @@ function mainChart(result){
         } 
     };
     //描画の処理
-    let chart = new google.visualization.ComboChart(document.getElementById('appendMain'));
-    chart.draw(chartData, options);
+    charts.main.clearChart();
+    charts.main.draw(chartData, options);
     //出来高棒グラフを作成する関数を呼び出し
     volumeChart(volume, dates, length);
 }
@@ -230,8 +236,8 @@ function volumeChart(volume, dates, length){
             }
         }
     }
-    let chart = new google.visualization.ColumnChart(document.getElementById('appendVolume'));
-    chart.draw(chartData, options);
+    charts.volume.clearChart();
+    charts.volume.draw(chartData, options);
 }
 
 function liquidationVolumeChart(data){
@@ -256,7 +262,7 @@ function liquidationVolumeChart(data){
     }
     //ローソク足の時と同じように、見た目の設定をする
     let rem = 13;
-    let height = rem * 4 + rem * 1.4 * data.length;
+    let height = rem * 4 + rem * 1.6 * data.length;
     let options = {
         chartArea:{left: maxSymbolNameLength + 5, top: 10, right: maxQuantityLength + 5, bottom: rem * 2},
         colors: ["#003A76"],
@@ -267,8 +273,8 @@ function liquidationVolumeChart(data){
         hAxis: {},
         vAxis:{}
     }
-    let chart = new google.visualization.BarChart(document.getElementById('appendLiquidationVolume'));
-    chart.draw(chartData, options);
+    charts.liquidationVolume.clearChart();
+    charts.liquidationVolume.draw(chartData, options);
 }
 
 function reLoadsChart(){
