@@ -256,7 +256,7 @@ function liquidationVolumeChart(data){
     }
     //ローソク足の時と同じように、見た目の設定をする
     let rem = 13;
-    let height = 200 + rem * data.length;
+    let height = 200 + rem * 1.4 * data.length;
     let options = {
         chartArea:{left: maxSymbolNameLength + 5, top: 10, right: maxQuantityLength + 5, bottom: rem * 2},
         colors: ["#003A76"],
