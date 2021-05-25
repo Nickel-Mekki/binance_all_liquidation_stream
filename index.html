@@ -8,23 +8,26 @@
 </head>
 <body>
     <!--- お買い得情報 --->
-    <section id="title">
-        <h1>お買い得情報</h1>
-    </section>
+    <header>
+        <h1><a href="index.html">お買い得情報</a></h1>
+        <nav class="nav">
+            <ul>
+                <li><a href="rule.html" target=”_blank”>取引ルール</a></li>
+            </ul>
+        </nav>
+    </header>
     <section id="message">
         <ul id="messageList"></ul>
     </section>
     <section>
-        <!--- 清算出来高の横棒グラフを配置 --->
-        <div id='appendLiquidationVolume'></div>
         <!--- ローソク足及び移動平均線グラフを配置 --->
         <section id="ctrlBox">
             <!--- 銘柄コードを受け付けるボックス --->
             <select id="symbol"></select>
             <!--- 描画期間を選ばせるプルダウンメニュー --->
             <select id="interval">
-                <option value="1m:1" selected>1m</option>
-                <option value="15m:15">15m</option>
+                <option value="1m:1">1m</option>
+                <option value="15m:15" selected>15m</option>
                 <option value="1h:60">1h</option>
                 <option value="4h:240">4h</option>
                 <option value="1d:1440">1d</option>
@@ -43,6 +46,8 @@
         <div id='appendMain'></div>
         <!--- 出来高の棒グラフを配置 --->
         <div id='appendVolume'></div>
+        <!--- 清算出来高の横棒グラフを配置 --->
+        <div id='appendLiquidationVolume'></div>
     </section>
     <!--- 文字幅測定用 --->
     <span id="ruler" style="visibility:hidden;position:absolute;white-space:nowrap;"></span>
