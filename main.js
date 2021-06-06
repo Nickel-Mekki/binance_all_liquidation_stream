@@ -1,4 +1,4 @@
-// このコードは https://qiita.com/KMim/items/930792c05b014f73f6dc の記事を参考に作成されています。
+// このコードは https://qiita.com/KMim/items/930792c05b014f73f6dc の記事を一部参考に作成されています。
 google.charts.load('current', {'packages':['corechart']});
 
 let charts = ""
@@ -34,10 +34,7 @@ $('#linkBtn').click(function(){
 })
 
 function getInfo(symbol, interval, limit, callback){
-    let date = new Date();
-    let now = date.getTime();
-    interval = interval.split(":");
-    url = 'https://fapi.binance.com/fapi/v1/klines?symbol=' + symbol.toLowerCase() + '&interval=' + interval[0] + '&startTime=' + (now - (interval[1] * 60 * 1000 * limit)) + '&endTime=' + now;
+    url = 'https://fapi.binance.com/fapi/v1/klines?symbol=' + symbol.toLowerCase() + '&interval=' + interval + '&limit=' + limit;
     ajaxGetRequests(url, callback);
 }
 
