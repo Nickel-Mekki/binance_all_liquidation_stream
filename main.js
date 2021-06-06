@@ -1,8 +1,6 @@
 // このコードは https://qiita.com/KMim/items/930792c05b014f73f6dc の記事を一部参考に作成されています。
 google.charts.load('current', {'packages':['corechart']});
 
-let charts = ""
-
 window.onload = function(){
     getMarkets(setOptionsHtmlForSymbols);
     recieveLiquidationMessage();
